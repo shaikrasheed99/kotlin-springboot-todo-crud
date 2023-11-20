@@ -1,13 +1,13 @@
 package com.todo.utils
 
 import com.todo.constants.Messages
-import com.todo.exceptions.InvalidIdException
+import com.todo.exceptions.InvalidTodoIdException
 import com.todo.exceptions.InvalidPriorityException
 import com.todo.exceptions.InvalidStatusException
 
 fun validateTodoId(id: Int) {
     if (id <= 0) {
-        throw InvalidIdException(Messages.VALID_TODO_ID.message)
+        throw InvalidTodoIdException(Messages.VALID_TODO_ID.message)
     }
 }
 

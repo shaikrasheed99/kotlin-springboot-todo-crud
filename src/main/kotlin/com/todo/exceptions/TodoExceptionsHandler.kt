@@ -50,7 +50,7 @@ class TodoExceptionsHandler {
         value = [
             InvalidStatusException::class,
             InvalidPriorityException::class,
-            InvalidIdException::class
+            InvalidTodoIdException::class
         ]
     )
     fun handleInvalidStatusAndPriorityException(exception: Exception): ResponseEntity<ErrorResponse> {
