@@ -111,4 +111,20 @@ internal class TodoServiceTest {
         assertEquals(firstTodo.priority, todo.priority)
         verify(todoRepository, times(1)).findByStatus(todo.status)
     }
+
+    @Test
+    internal fun shouldBeAbleToReturnTodosByPriority() {
+        val todos = mutableListOf<Todo>(todo)
+        `when`(todoRepository.findByPriority(todo.priority)).thenReturn(todos)
+
+        val returnedTodos = todoService.getTodosByPriority(todo.priority)
+
+        val firstTodo = returnedTodos[0]
+        assertEquals(returnedTodos.size, 1)
+        assertEquals(firstTodo.id, todo.id)
+        assertEquals(firstTodo.description, todo.description)
+        assertEquals(firstTodo.status, todo.status)
+        assertEquals(firstTodo.priority, todo.priority)
+        verify(todoRepository, times(1)).findByPriority(todo.priority)
+    }
 }

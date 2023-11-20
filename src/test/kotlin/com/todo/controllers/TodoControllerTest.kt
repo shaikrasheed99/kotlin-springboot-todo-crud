@@ -100,4 +100,14 @@ internal class TodoControllerTest {
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
             .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
     }
+
+    @Test
+    internal fun shouldBeAbleToReturnTodosByPriority() {
+        mockMvc.perform(
+            get("/todos/priority/{priority}", todo.status)
+        ).andExpect(status().isOk)
+            .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
+            .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
+            .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
+    }
 }

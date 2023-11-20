@@ -36,4 +36,8 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
     fun getTodosByStatus(status: String): MutableList<Todo> {
         return todoRepository.findByStatus(status)
     }
+
+    fun getTodosByPriority(priority: String): MutableList<Todo> {
+        return todoRepository.findByPriority(priority)
+    }
 }

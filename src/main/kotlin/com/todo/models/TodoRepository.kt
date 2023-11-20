@@ -6,4 +6,7 @@ import org.springframework.data.repository.CrudRepository
 interface TodoRepository : CrudRepository<Todo, Int> {
     @Query(value = "SELECT * FROM todos WHERE status = :status", nativeQuery = true)
     fun findByStatus(status: String): MutableList<Todo>
+
+    @Query(value = "SELECT * FROM todos WHERE priority = :priority", nativeQuery = true)
+    fun findByPriority(priority: String): MutableList<Todo>
 }

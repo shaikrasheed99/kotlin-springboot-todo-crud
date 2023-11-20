@@ -47,4 +47,23 @@ class TodoRepositoryTest {
 
         assertEquals(todos.size, 0)
     }
+
+    @Test
+    internal fun shouldBeAbleToReturnTodosByPriority() {
+        val todos = todoRepository.findByPriority(todo.priority)
+
+        val firstTodo = todos[0]
+        assertEquals(todos.size, 1)
+        assertEquals(firstTodo.id, todo.id)
+        assertEquals(firstTodo.description, todo.description)
+        assertEquals(firstTodo.status, todo.status)
+        assertEquals(firstTodo.priority, todo.priority)
+    }
+
+    @Test
+    internal fun shouldBeAbleToReturnEmptyTodosListWhenPriorityIsNotPresent() {
+        val todos = todoRepository.findByPriority("low")
+
+        assertEquals(todos.size, 0)
+    }
 }

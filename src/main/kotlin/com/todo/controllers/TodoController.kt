@@ -45,4 +45,13 @@ class TodoController(private val todoService: TodoService) {
             ResponseEntity.ok(successResponse)
         }
     }
+
+    @GetMapping("/todos/priority/{priority}")
+    fun getTodosByPriority(@PathVariable priority: String): ResponseEntity<SuccessResponse> {
+        return todoService.getTodosByPriority(priority).let {
+            val message = MessageResponses.ALL_TODO_DETAILS.message
+            val successResponse = createSuccessResponse(message, it)
+            ResponseEntity.ok(successResponse)
+        }
+    }
 }
