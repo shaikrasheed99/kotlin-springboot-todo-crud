@@ -19,6 +19,15 @@ class TodoController(private val todoService: TodoService) {
         }
     }
 
+    @GetMapping("/todos")
+    fun getAllTodos(): ResponseEntity<SuccessResponse> {
+        return todoService.getAllTodos().let {
+            val message = MessageResponses.ALL_TODO_DETAILS.message
+            val successResponse = createSuccessResponse(message, it)
+            ResponseEntity.ok(successResponse)
+        }
+    }
+
     @GetMapping("/todos/{todoId}")
     fun getTodoById(@PathVariable todoId: Int): ResponseEntity<SuccessResponse> {
         return todoService.getById(todoId).let {

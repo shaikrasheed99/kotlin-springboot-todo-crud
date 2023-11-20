@@ -6,6 +6,7 @@ import com.todo.models.Todo
 import com.todo.models.TodoRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.stream.StreamSupport
 
 @Service
 class TodoService(@Autowired private val todoRepository: TodoRepository) {
@@ -24,5 +25,11 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
         return todoRepository
             .findById(todoId)
             .orElseThrow { TodoNotFound("Todo not found by Id") };
+    }
+
+    fun getAllTodos(): MutableList<Todo> {
+        return StreamSupport
+            .stream(todoRepository.findAll().spliterator(), false)
+            .toList()
     }
 }

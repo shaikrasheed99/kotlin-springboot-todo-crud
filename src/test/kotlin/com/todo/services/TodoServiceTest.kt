@@ -80,4 +80,19 @@ internal class TodoServiceTest {
         }
         verify(todoRepository, times(1)).findById(any(Int::class.java))
     }
+
+    @Test
+    internal fun shouldBeAbleToReturnAllTodos() {
+        val todos = listOf<Todo>(todo)
+        `when`(todoRepository.findAll()).thenReturn(todos)
+
+        val returnedTodos = todoService.getAllTodos()
+
+        val firstTodo = returnedTodos[0]
+        assertEquals(firstTodo.id, todo.id)
+        assertEquals(firstTodo.description, todo.description)
+        assertEquals(firstTodo.status, todo.status)
+        assertEquals(firstTodo.priority, todo.priority)
+        verify(todoRepository, times(1)).findAll()
+    }
 }
