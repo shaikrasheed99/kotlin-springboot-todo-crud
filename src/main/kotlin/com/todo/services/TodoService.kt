@@ -1,7 +1,8 @@
 package com.todo.services
 
+import com.todo.constants.Messages
 import com.todo.dto.request.TodoRequest
-import com.todo.exceptions.TodoNotFound
+import com.todo.exceptions.TodoNotFoundException
 import com.todo.models.Todo
 import com.todo.models.TodoRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +25,7 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
     fun getById(todoId: Int): Todo {
         return todoRepository
             .findById(todoId)
-            .orElseThrow { TodoNotFound("Todo not found by Id") };
+            .orElseThrow { TodoNotFoundException(Messages.TODO_NOT_FOUND_BY_ID.message) };
     }
 
     fun getAllTodos(): MutableList<Todo> {

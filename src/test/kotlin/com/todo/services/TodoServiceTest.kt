@@ -1,7 +1,7 @@
 package com.todo.services
 
 import com.todo.dto.request.TodoRequest
-import com.todo.exceptions.TodoNotFound
+import com.todo.exceptions.TodoNotFoundException
 import com.todo.models.Todo
 import com.todo.models.TodoRepository
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -75,7 +75,7 @@ internal class TodoServiceTest {
     internal fun shouldBeAbleToThrowTodoNotFoundExceptionWhenTodoIsNotPresentWithId() {
         `when`(todoRepository.findById(any(Int::class.java))).thenReturn(Optional.empty())
 
-        assertThrows<TodoNotFound> {
+        assertThrows<TodoNotFoundException> {
             todo.id?.let(todoService::getById)
         }
         verify(todoRepository, times(1)).findById(any(Int::class.java))

@@ -12,8 +12,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @ControllerAdvice
 class TodoExceptionsHandler {
-    @ExceptionHandler(TodoNotFound::class)
-    fun handleTodoNotFoundException(todoNotFound: TodoNotFound): ResponseEntity<ErrorResponse> {
+    @ExceptionHandler(TodoNotFoundException::class)
+    fun handleTodoNotFoundException(todoNotFoundException: TodoNotFoundException): ResponseEntity<ErrorResponse> {
         val errorResponse =
             createErrorResponse(HttpStatus.NOT_FOUND, Messages.TODO_NOT_FOUND_BY_ID.message)
 
