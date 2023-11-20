@@ -45,9 +45,9 @@ class TodoController(private val todoService: TodoService) {
 
     @GetMapping("/todos/status/{status}")
     fun getTodosByStatus(@PathVariable status: String): ResponseEntity<SuccessResponse> {
-        validateStatus(status)
+        validateStatus(status.lowercase())
 
-        return todoService.getTodosByStatus(status).let {
+        return todoService.getTodosByStatus(status.lowercase()).let {
             val messages = Messages.ALL_TODO_DETAILS.message
             val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
@@ -56,9 +56,9 @@ class TodoController(private val todoService: TodoService) {
 
     @GetMapping("/todos/priority/{priority}")
     fun getTodosByPriority(@PathVariable priority: String): ResponseEntity<SuccessResponse> {
-        validatePriority(priority)
+        validatePriority(priority.lowercase())
 
-        return todoService.getTodosByPriority(priority).let {
+        return todoService.getTodosByPriority(priority.lowercase()).let {
             val messages = Messages.ALL_TODO_DETAILS.message
             val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
