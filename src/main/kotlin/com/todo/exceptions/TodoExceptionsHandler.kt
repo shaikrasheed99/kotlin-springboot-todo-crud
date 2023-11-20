@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @ControllerAdvice
 class TodoExceptionsHandler {
@@ -15,20 +16,48 @@ class TodoExceptionsHandler {
     fun handleTodoNotFoundException(todoNotFound: TodoNotFound): ResponseEntity<ErrorResponse> {
         val errorResponse =
             createErrorResponse(HttpStatus.NOT_FOUND, MessageResponses.TODO_NOT_FOUND_BY_ID.message)
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse)
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(
-        methodArgumentNotValidException: MethodArgumentNotValidException
-    ): ResponseEntity<HashMap<String, String?>> {
+    @ExceptionHandler(
+        value = [
+            MethodArgumentNotValidException::class,
+            MethodArgumentTypeMismatchException::class
+        ]
+    )
+    fun handleMethodArgumentNotValidAndMismatchException(exception: Exception): ResponseEntity<HashMap<String, String?>> {
         val errors = HashMap<String, String?>()
-        val fieldErrors = methodArgumentNotValidException.fieldErrors
 
-        fieldErrors.forEach {
-            errors[it.field] = it.defaultMessage
+        when (exception) {
+            is MethodArgumentNotValidException -> {
+                val fieldErrors = exception.fieldErrors
+
+                fieldErrors.forEach {
+                    errors[it.field] = it.defaultMessage
+                }
+            }
+
+            is MethodArgumentTypeMismatchException -> {
+                errors[exception.name] = exception.message
+            }
         }
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors)
+    }
+
+    @ExceptionHandler(
+        value = [
+            InvalidStatusException::class,
+            InvalidPriorityException::class,
+            InvalidIdException::class
+        ]
+    )
+    fun handleInvalidStatusAndPriorityException(exception: Exception): ResponseEntity<ErrorResponse> {
+        val errorResponse = exception.message?.let {
+            createErrorResponse(HttpStatus.BAD_REQUEST, it)
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse)
     }
 }

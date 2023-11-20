@@ -62,7 +62,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenDescriptionFiledIsBlank() {
+    internal fun shouldBeAbleToReturnErrorWhenRequestedDescriptionFiledIsBlank() {
         val todoRequest = TodoRequest("", "pending", "high")
         val todoRequestJson = todoRequest.convertToJson()
 
@@ -74,7 +74,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenStatusFiledIsNotValid() {
+    internal fun shouldBeAbleToReturnErrorWhenRequestedStatusFiledIsNotValid() {
         val todoRequest = TodoRequest("sleeping", "pen", "high")
         val todoRequestJson = todoRequest.convertToJson()
 
@@ -86,7 +86,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenPriorityFiledIsNotValid() {
+    internal fun shouldBeAbleToReturnErrorWhenRequestedPriorityFiledIsNotValid() {
         val todoRequest = TodoRequest("sleeping", "pending", "hi")
         val todoRequestJson = todoRequest.convertToJson()
 
@@ -118,6 +118,13 @@ internal class TodoControllerTest {
     }
 
     @Test
+    internal fun shouldBeAbleToReturnErrorWhenRequestedTodoIdIsNotValid() {
+        mockMvc.perform(
+            get("/todos/{todoId}", "abc")
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
     internal fun shouldBeAbleToReturnAllTodos() {
         mockMvc.perform(
             get("/todos")
@@ -138,12 +145,26 @@ internal class TodoControllerTest {
     }
 
     @Test
+    internal fun shouldBeAbleToReturnErrorWhenRequestedStatusIsNotValid() {
+        mockMvc.perform(
+            get("/todos/status/{status}", "abc123")
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
     internal fun shouldBeAbleToReturnTodosByPriority() {
         mockMvc.perform(
-            get("/todos/priority/{priority}", todo.status)
+            get("/todos/priority/{priority}", todo.priority)
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
             .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
+    }
+
+    @Test
+    internal fun shouldBeAbleToReturnErrorWhenRequestedPriorityIsNotValid() {
+        mockMvc.perform(
+            get("/todos/priority/{priority}", "abc123")
+        ).andExpect(status().isBadRequest)
     }
 }

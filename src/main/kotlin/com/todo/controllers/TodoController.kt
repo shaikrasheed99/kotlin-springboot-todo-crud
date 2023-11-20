@@ -5,6 +5,9 @@ import com.todo.dto.request.TodoRequest
 import com.todo.dto.response.SuccessResponse
 import com.todo.services.TodoService
 import com.todo.utils.createSuccessResponse
+import com.todo.utils.validatePriority
+import com.todo.utils.validateStatus
+import com.todo.utils.validateTodoId
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -31,6 +34,8 @@ class TodoController(private val todoService: TodoService) {
 
     @GetMapping("/todos/{todoId}")
     fun getTodoById(@PathVariable todoId: Int): ResponseEntity<SuccessResponse> {
+        validateTodoId(todoId)
+
         return todoService.getById(todoId).let {
             val message = MessageResponses.TODO_DETAILS_BY_ID.message
             val successResponse = createSuccessResponse(message, it)
@@ -40,6 +45,8 @@ class TodoController(private val todoService: TodoService) {
 
     @GetMapping("/todos/status/{status}")
     fun getTodosByStatus(@PathVariable status: String): ResponseEntity<SuccessResponse> {
+        validateStatus(status)
+
         return todoService.getTodosByStatus(status).let {
             val message = MessageResponses.ALL_TODO_DETAILS.message
             val successResponse = createSuccessResponse(message, it)
@@ -49,6 +56,8 @@ class TodoController(private val todoService: TodoService) {
 
     @GetMapping("/todos/priority/{priority}")
     fun getTodosByPriority(@PathVariable priority: String): ResponseEntity<SuccessResponse> {
+        validatePriority(priority)
+
         return todoService.getTodosByPriority(priority).let {
             val message = MessageResponses.ALL_TODO_DETAILS.message
             val successResponse = createSuccessResponse(message, it)
