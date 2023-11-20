@@ -1,6 +1,6 @@
 package com.todo.controllers
 
-import com.todo.constants.MessageResponses
+import com.todo.constants.Messages
 import com.todo.dto.request.TodoRequest
 import com.todo.dto.response.SuccessResponse
 import com.todo.services.TodoService
@@ -17,8 +17,8 @@ class TodoController(private val todoService: TodoService) {
     @PostMapping("/todos")
     fun addTodo(@Valid @RequestBody todoRequest: TodoRequest): ResponseEntity<SuccessResponse> {
         return todoService.createTodo(todoRequest).let {
-            val message = MessageResponses.TODO_CREATION_SUCCESS.message
-            val successResponse = createSuccessResponse(message, it)
+            val messages = Messages.TODO_CREATION_SUCCESS.message
+            val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
         }
     }
@@ -26,8 +26,8 @@ class TodoController(private val todoService: TodoService) {
     @GetMapping("/todos")
     fun getAllTodos(): ResponseEntity<SuccessResponse> {
         return todoService.getAllTodos().let {
-            val message = MessageResponses.ALL_TODO_DETAILS.message
-            val successResponse = createSuccessResponse(message, it)
+            val messages = Messages.ALL_TODO_DETAILS.message
+            val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
         }
     }
@@ -37,8 +37,8 @@ class TodoController(private val todoService: TodoService) {
         validateTodoId(todoId)
 
         return todoService.getById(todoId).let {
-            val message = MessageResponses.TODO_DETAILS_BY_ID.message
-            val successResponse = createSuccessResponse(message, it)
+            val messages = Messages.TODO_DETAILS_BY_ID.message
+            val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
         }
     }
@@ -48,8 +48,8 @@ class TodoController(private val todoService: TodoService) {
         validateStatus(status)
 
         return todoService.getTodosByStatus(status).let {
-            val message = MessageResponses.ALL_TODO_DETAILS.message
-            val successResponse = createSuccessResponse(message, it)
+            val messages = Messages.ALL_TODO_DETAILS.message
+            val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
         }
     }
@@ -59,8 +59,8 @@ class TodoController(private val todoService: TodoService) {
         validatePriority(priority)
 
         return todoService.getTodosByPriority(priority).let {
-            val message = MessageResponses.ALL_TODO_DETAILS.message
-            val successResponse = createSuccessResponse(message, it)
+            val messages = Messages.ALL_TODO_DETAILS.message
+            val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
         }
     }

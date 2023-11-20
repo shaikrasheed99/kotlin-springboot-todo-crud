@@ -1,6 +1,6 @@
 package com.todo.controllers
 
-import com.todo.constants.MessageResponses
+import com.todo.constants.Messages
 import com.todo.constants.StatusResponses
 import com.todo.dto.request.TodoRequest
 import com.todo.models.Todo
@@ -58,7 +58,7 @@ internal class TodoControllerTest {
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
-            .andExpect(jsonPath("$.message").value(MessageResponses.TODO_CREATION_SUCCESS.message))
+            .andExpect(jsonPath("$.message").value(Messages.TODO_CREATION_SUCCESS.message))
     }
 
     @Test
@@ -104,7 +104,7 @@ internal class TodoControllerTest {
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
-            .andExpect(jsonPath("$.message").value(MessageResponses.TODO_DETAILS_BY_ID.message))
+            .andExpect(jsonPath("$.message").value(Messages.TODO_DETAILS_BY_ID.message))
     }
 
     @Test
@@ -114,7 +114,7 @@ internal class TodoControllerTest {
         ).andExpect(status().isNotFound)
             .andExpect(jsonPath("$.status").value(StatusResponses.ERROR.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.name))
-            .andExpect(jsonPath("$.message").value(MessageResponses.TODO_NOT_FOUND_BY_ID.message))
+            .andExpect(jsonPath("$.message").value(Messages.TODO_NOT_FOUND_BY_ID.message))
     }
 
     @Test
@@ -131,7 +131,7 @@ internal class TodoControllerTest {
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
-            .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
+            .andExpect(jsonPath("$.message").value(Messages.ALL_TODO_DETAILS.message))
     }
 
     @Test
@@ -141,7 +141,7 @@ internal class TodoControllerTest {
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
-            .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
+            .andExpect(jsonPath("$.message").value(Messages.ALL_TODO_DETAILS.message))
     }
 
     @Test
@@ -158,7 +158,7 @@ internal class TodoControllerTest {
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
-            .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
+            .andExpect(jsonPath("$.message").value(Messages.ALL_TODO_DETAILS.message))
     }
 
     @Test

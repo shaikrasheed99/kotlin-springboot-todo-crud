@@ -1,6 +1,6 @@
 package com.todo.controllers
 
-import com.todo.constants.MessageResponses
+import com.todo.constants.Messages
 import com.todo.constants.StatusResponses
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +24,6 @@ internal class HealthControllerTest {
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
-            .andExpect(jsonPath("$.message").value(MessageResponses.SERVER_IS_UP.message))
+            .andExpect(jsonPath("$.message").value(Messages.SERVER_IS_UP.message))
     }
 }
