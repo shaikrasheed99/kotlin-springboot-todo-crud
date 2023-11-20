@@ -90,4 +90,14 @@ internal class TodoControllerTest {
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
             .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
     }
+
+    @Test
+    internal fun shouldBeAbleToReturnTodosByStatus() {
+        mockMvc.perform(
+            get("/todos/status/{status}", todo.status)
+        ).andExpect(status().isOk)
+            .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
+            .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
+            .andExpect(jsonPath("$.message").value(MessageResponses.ALL_TODO_DETAILS.message))
+    }
 }

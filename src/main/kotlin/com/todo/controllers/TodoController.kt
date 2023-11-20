@@ -36,4 +36,13 @@ class TodoController(private val todoService: TodoService) {
             ResponseEntity.ok(successResponse)
         }
     }
+
+    @GetMapping("/todos/status/{status}")
+    fun getTodosByStatus(@PathVariable status: String): ResponseEntity<SuccessResponse> {
+        return todoService.getTodosByStatus(status).let {
+            val message = MessageResponses.ALL_TODO_DETAILS.message
+            val successResponse = createSuccessResponse(message, it)
+            ResponseEntity.ok(successResponse)
+        }
+    }
 }

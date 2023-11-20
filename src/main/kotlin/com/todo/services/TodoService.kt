@@ -32,4 +32,8 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
             .stream(todoRepository.findAll().spliterator(), false)
             .toList()
     }
+
+    fun getTodosByStatus(status: String): MutableList<Todo> {
+        return todoRepository.findByStatus(status)
+    }
 }
