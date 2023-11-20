@@ -14,8 +14,8 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
         val newTodo = Todo(
             null,
             description = todoRequest.description,
-            status = todoRequest.status,
-            priority = todoRequest.priority
+            status = todoRequest.status.lowercase(),
+            priority = todoRequest.priority.lowercase()
         )
 
         return todoRepository.save(newTodo)

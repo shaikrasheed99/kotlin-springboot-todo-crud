@@ -5,13 +5,14 @@ import com.todo.dto.request.TodoRequest
 import com.todo.dto.response.SuccessResponse
 import com.todo.services.TodoService
 import com.todo.utils.createSuccessResponse
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 class TodoController(private val todoService: TodoService) {
     @PostMapping("/todos")
-    fun addTodo(@RequestBody todoRequest: TodoRequest): ResponseEntity<SuccessResponse> {
+    fun addTodo(@Valid @RequestBody todoRequest: TodoRequest): ResponseEntity<SuccessResponse> {
         return todoService.createTodo(todoRequest).let {
             val message = MessageResponses.TODO_CREATION_SUCCESS.message
             val successResponse = createSuccessResponse(message, it)

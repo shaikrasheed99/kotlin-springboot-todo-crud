@@ -43,7 +43,7 @@ internal class TodoControllerTest {
 
     @AfterEach
     fun tearDown() {
-        todo.id?.let(todoRepository::deleteById)
+        todoRepository.deleteAll()
     }
 
     @Test
@@ -62,9 +62,45 @@ internal class TodoControllerTest {
     }
 
     @Test
+    internal fun shouldBeAbleToReturnErrorWhenDescriptionFiledIsBlank() {
+        val todoRequest = TodoRequest("", "pending", "high")
+        val todoRequestJson = todoRequest.convertToJson()
+
+        mockMvc.perform(
+            post("/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(todoRequestJson)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    internal fun shouldBeAbleToReturnErrorWhenStatusFiledIsNotValid() {
+        val todoRequest = TodoRequest("sleeping", "pen", "high")
+        val todoRequestJson = todoRequest.convertToJson()
+
+        mockMvc.perform(
+            post("/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(todoRequestJson)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    internal fun shouldBeAbleToReturnErrorWhenPriorityFiledIsNotValid() {
+        val todoRequest = TodoRequest("sleeping", "pending", "hi")
+        val todoRequestJson = todoRequest.convertToJson()
+
+        mockMvc.perform(
+            post("/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(todoRequestJson)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
     internal fun shouldBeAbleToReturnTodoById() {
         mockMvc.perform(
-            get("/todos/{todoId}", 1)
+            get("/todos/{todoId}", todo.id)
         ).andExpect(status().isOk)
             .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
