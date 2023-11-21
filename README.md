@@ -10,9 +10,7 @@
     - Update todo
     - Delete todo
 
-## APIs
-
-### Create a Todo
+## API - Create a Todo
 
 * Request
 ```
@@ -40,7 +38,7 @@ Content-Type: application/json
 }
 ```
 
-### Get all Todos 
+## API - Get all Todos 
 
 * Request
 ```
@@ -64,7 +62,7 @@ Host: localhost:8080
 }
 ```
 
-### Get Todo details by Todo id
+## API - Get Todo details by Todo id
 
 * Request
 ```
@@ -86,7 +84,7 @@ Host: localhost:8080
 }
 ```
 
-### Get Todos by Priority
+## API - Get Todos by Priority
 
 * Request
 ```
@@ -110,7 +108,7 @@ Host: localhost:8080
 }
 ```
 
-### Get Todos by Status
+## API - Get Todos by Status
 
 * Request
 ```
@@ -134,7 +132,7 @@ Host: localhost:8080
 }
 ```
 
-### Update Todo details
+## API - Update Todo details
 
 * Request
 ```
@@ -160,7 +158,7 @@ Content-Type: application/json
 }
 ```
 
-### Delete a Todo by Todo id
+## API - Delete a Todo by Todo id
 
 * Request
 ```
