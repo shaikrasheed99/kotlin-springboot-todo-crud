@@ -52,4 +52,10 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
 
         return todoRepository.save(todo)
     }
+
+    fun deleteTodo(todoId: Int) {
+        getById(todoId).let {
+            todoRepository.delete(it)
+        }
+    }
 }

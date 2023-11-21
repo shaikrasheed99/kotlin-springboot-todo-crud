@@ -79,4 +79,15 @@ class TodoController(private val todoService: TodoService) {
             ResponseEntity.ok(successResponse)
         }
     }
+
+    @DeleteMapping("/todos/{todoId}")
+    fun deleteTodo(@PathVariable todoId: Int): ResponseEntity<SuccessResponse> {
+        validateTodoId(todoId)
+
+        return todoService.deleteTodo(todoId).let {
+            val messages = Messages.TODO_DELETE_SUCCESS.message
+            val successResponse = createSuccessResponse(messages, it)
+            ResponseEntity.ok(successResponse)
+        }
+    }
 }

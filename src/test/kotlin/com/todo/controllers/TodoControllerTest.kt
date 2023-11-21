@@ -200,9 +200,17 @@ internal class TodoControllerTest {
 
     @Test
     internal fun shouldNotBeAbleToUpdateTodoWhenRequestedTodoIdIsNotPresent() {
+        val updateTodoRequestJson = UpdateTodoRequest(
+            description = "sleeping",
+            status = "completed",
+            priority = "high"
+        ).convertToJson()
+
         mockMvc.perform(
             put("/todos/{todoId}", 100)
-        ).andExpect(status().isBadRequest)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateTodoRequestJson)
+        ).andExpect(status().isNotFound)
     }
 
     @Test
@@ -233,5 +241,22 @@ internal class TodoControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updateTodoRequestJson)
         ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    internal fun shouldBeAbleToDeleteTodo() {
+        mockMvc.perform(
+            delete("/todos/{todoId}", todo.id)
+        ).andExpect(status().isOk)
+            .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
+            .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
+            .andExpect(jsonPath("$.message").value(Messages.TODO_DELETE_SUCCESS.message))
+    }
+
+    @Test
+    internal fun shouldNotBeAbleToDeleteTodoWhenRequestedTodoIdIsNotPresent() {
+        mockMvc.perform(
+            delete("/todos/{todoId}", 100)
+        ).andExpect(status().isNotFound)
     }
 }

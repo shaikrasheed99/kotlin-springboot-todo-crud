@@ -8,6 +8,7 @@ import com.todo.models.TodoRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.ArgumentMatchers.any
@@ -152,7 +153,7 @@ internal class TodoServiceTest {
     }
 
     @Test
-    internal fun shouldBeAbleToThrowTodoNotFoundExceptionWhenTodoIsNotPresentById() {
+    internal fun shouldBeAbleToThrowTodoNotFoundExceptionWhenTodoIsNotPresentToUpdate() {
         `when`(todoRepository.findById(any(Int::class.java))).thenReturn(Optional.empty())
         val updateTodoRequest = todo.let {
             UpdateTodoRequest(
@@ -164,6 +165,27 @@ internal class TodoServiceTest {
 
         assertThrows<TodoNotFoundException> {
             todo.id?.let { todoService.updateTodo(it, updateTodoRequest) }
+        }
+        verify(todoRepository, times(1)).findById(any(Int::class.java))
+    }
+
+    @Test
+    internal fun shouldBeAbleToDeleteTodo() {
+        `when`(todoRepository.findById(any(Int::class.java))).thenReturn(Optional.ofNullable(todo))
+
+        assertDoesNotThrow {
+            todo.id?.let { todoService.deleteTodo(it) }
+        }
+        verify(todoRepository, times(1)).delete(any(Todo::class.java))
+        verify(todoRepository, times(1)).findById(any(Int::class.java))
+    }
+
+    @Test
+    internal fun shouldBeAbleToThrowTodoNotFoundExceptionWhenTodoIsNotPresentToDelete() {
+        `when`(todoRepository.findById(any(Int::class.java))).thenReturn(Optional.empty())
+
+        assertThrows<TodoNotFoundException> {
+            todo.id?.let { todoService.deleteTodo(it) }
         }
         verify(todoRepository, times(1)).findById(any(Int::class.java))
     }
