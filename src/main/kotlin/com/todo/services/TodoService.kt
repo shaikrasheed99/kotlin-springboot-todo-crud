@@ -2,6 +2,7 @@ package com.todo.services
 
 import com.todo.constants.Messages
 import com.todo.dto.request.TodoRequest
+import com.todo.dto.request.UpdateTodoRequest
 import com.todo.exceptions.TodoNotFoundException
 import com.todo.models.Todo
 import com.todo.models.TodoRepository
@@ -40,5 +41,15 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
 
     fun getTodosByPriority(priority: String): MutableList<Todo> {
         return todoRepository.findByPriority(priority)
+    }
+
+    fun updateTodo(todoId: Int, updateTodoRequest: UpdateTodoRequest): Todo {
+        val todo = getById(todoId).apply {
+            description = updateTodoRequest.description ?: description
+            status = updateTodoRequest.status?.lowercase() ?: status
+            priority = updateTodoRequest.priority?.lowercase() ?: priority
+        }
+
+        return todoRepository.save(todo)
     }
 }

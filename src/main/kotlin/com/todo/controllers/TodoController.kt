@@ -2,6 +2,7 @@ package com.todo.controllers
 
 import com.todo.constants.Messages
 import com.todo.dto.request.TodoRequest
+import com.todo.dto.request.UpdateTodoRequest
 import com.todo.dto.response.SuccessResponse
 import com.todo.services.TodoService
 import com.todo.utils.createSuccessResponse
@@ -60,6 +61,20 @@ class TodoController(private val todoService: TodoService) {
 
         return todoService.getTodosByPriority(priority.lowercase()).let {
             val messages = Messages.ALL_TODO_DETAILS.message
+            val successResponse = createSuccessResponse(messages, it)
+            ResponseEntity.ok(successResponse)
+        }
+    }
+
+    @PutMapping("/todos/{todoId}")
+    fun updateTodo(
+        @PathVariable todoId: Int,
+        @Valid @RequestBody updateTodoRequest: UpdateTodoRequest
+    ): ResponseEntity<SuccessResponse> {
+        validateTodoId(todoId)
+
+        return todoService.updateTodo(todoId, updateTodoRequest).let {
+            val messages = Messages.TODO_UPDATE_SUCCESS.message
             val successResponse = createSuccessResponse(messages, it)
             ResponseEntity.ok(successResponse)
         }

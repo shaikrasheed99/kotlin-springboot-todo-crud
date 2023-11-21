@@ -3,6 +3,7 @@ package com.todo.controllers
 import com.todo.constants.Messages
 import com.todo.constants.StatusResponses
 import com.todo.dto.request.TodoRequest
+import com.todo.dto.request.UpdateTodoRequest
 import com.todo.models.Todo
 import com.todo.models.TodoRepository
 import com.todo.utils.convertToJson
@@ -15,8 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -165,6 +165,52 @@ internal class TodoControllerTest {
     internal fun shouldBeAbleToReturnErrorWhenRequestedPriorityIsNotValid() {
         mockMvc.perform(
             get("/todos/priority/{priority}", "abc123")
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    internal fun shouldBeAbleToUpdateDescriptionOfTodo() {
+        val updateTodoRequest = UpdateTodoRequest("sleeping", null, null)
+        val updateTodoRequestJson = updateTodoRequest.convertToJson()
+
+        mockMvc.perform(
+            put("/todos/{todoId}", todo.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateTodoRequestJson)
+        ).andExpect(status().isOk)
+            .andExpect(jsonPath("$.status").value(StatusResponses.SUCCESS.name))
+            .andExpect(jsonPath("$.code").value(HttpStatus.OK.name))
+            .andExpect(jsonPath("$.message").value(Messages.TODO_UPDATE_SUCCESS.message))
+    }
+
+    @Test
+    internal fun shouldBeAbleToReturnErrorWhenRequestedTodoIdIsNotPresent() {
+        mockMvc.perform(
+            put("/todos/{todoId}", 100)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    internal fun shouldNotBeAbleToUpdateTodoWhenRequestedStatusIsNotValid() {
+        val updateTodoRequest = UpdateTodoRequest("sleeping", "invalidStatus", null)
+        val updateTodoRequestJson = updateTodoRequest.convertToJson()
+
+        mockMvc.perform(
+            put("/todos/{todoId}", todo.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateTodoRequestJson)
+        ).andExpect(status().isBadRequest)
+    }
+
+    @Test
+    internal fun shouldNotBeAbleToUpdateTodoWhenRequestedPriorityIsNotValid() {
+        val updateTodoRequest = UpdateTodoRequest("sleeping", null, "invalidPriority")
+        val updateTodoRequestJson = updateTodoRequest.convertToJson()
+
+        mockMvc.perform(
+            put("/todos/{todoId}", todo.id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateTodoRequestJson)
         ).andExpect(status().isBadRequest)
     }
 }

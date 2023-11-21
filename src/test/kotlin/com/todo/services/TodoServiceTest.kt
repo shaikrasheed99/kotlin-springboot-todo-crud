@@ -1,6 +1,7 @@
 package com.todo.services
 
 import com.todo.dto.request.TodoRequest
+import com.todo.dto.request.UpdateTodoRequest
 import com.todo.exceptions.TodoNotFoundException
 import com.todo.models.Todo
 import com.todo.models.TodoRepository
@@ -126,5 +127,44 @@ internal class TodoServiceTest {
         assertEquals(firstTodo.status, todo.status)
         assertEquals(firstTodo.priority, todo.priority)
         verify(todoRepository, times(1)).findByPriority(todo.priority)
+    }
+
+    @Test
+    internal fun shouldBeAbleToUpdateTodo() {
+        `when`(todoRepository.save(any())).thenReturn(todo)
+        `when`(todoRepository.findById(any(Int::class.java))).thenReturn(Optional.ofNullable(todo))
+        val updateTodoRequest = todo.let {
+            UpdateTodoRequest(
+                description = it.description,
+                status = it.status,
+                priority = it.priority
+            )
+        }
+
+        val updatedTodo = todo.id?.let { todoService.updateTodo(it, updateTodoRequest) }
+
+        assertEquals(updatedTodo?.id, todo.id)
+        assertEquals(updatedTodo?.description, todo.description)
+        assertEquals(updatedTodo?.status, todo.status)
+        assertEquals(updatedTodo?.priority, todo.priority)
+        verify(todoRepository, times(1)).save(any())
+        verify(todoRepository, times(1)).findById(any(Int::class.java))
+    }
+
+    @Test
+    internal fun shouldBeAbleToThrowTodoNotFoundExceptionWhenTodoIsNotPresentById() {
+        `when`(todoRepository.findById(any(Int::class.java))).thenReturn(Optional.empty())
+        val updateTodoRequest = todo.let {
+            UpdateTodoRequest(
+                description = it.description,
+                status = it.status,
+                priority = it.priority
+            )
+        }
+
+        assertThrows<TodoNotFoundException> {
+            todo.id?.let { todoService.updateTodo(it, updateTodoRequest) }
+        }
+        verify(todoRepository, times(1)).findById(any(Int::class.java))
     }
 }
