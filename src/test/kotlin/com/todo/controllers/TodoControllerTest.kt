@@ -48,8 +48,11 @@ internal class TodoControllerTest {
 
     @Test
     internal fun shouldBeAbleToAddNewTodo() {
-        val todoRequest = TodoRequest("sleeping", "pending", "high")
-        val todoRequestJson = todoRequest.convertToJson()
+        val todoRequestJson = TodoRequest(
+            description = "sleeping",
+            status = "pending",
+            priority = "high"
+        ).convertToJson()
 
         mockMvc.perform(
             post("/todos")
@@ -62,9 +65,12 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenRequestedDescriptionFiledIsBlank() {
-        val todoRequest = TodoRequest("", "pending", "high")
-        val todoRequestJson = todoRequest.convertToJson()
+    internal fun shouldNotBeAbleToAddNewTodoWhenRequestedDescriptionFiledIsBlank() {
+        val todoRequestJson = TodoRequest(
+            description = "",
+            status = "pending",
+            priority = "high"
+        ).convertToJson()
 
         mockMvc.perform(
             post("/todos")
@@ -74,9 +80,12 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenRequestedStatusFiledIsNotValid() {
-        val todoRequest = TodoRequest("sleeping", "pen", "high")
-        val todoRequestJson = todoRequest.convertToJson()
+    internal fun shouldNotBeAbleToAddNewTodoWhenRequestedStatusFiledIsNotValid() {
+        val todoRequestJson = TodoRequest(
+            description = "sleeping",
+            status = "invalidStatus",
+            priority = "high"
+        ).convertToJson()
 
         mockMvc.perform(
             post("/todos")
@@ -86,9 +95,12 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenRequestedPriorityFiledIsNotValid() {
-        val todoRequest = TodoRequest("sleeping", "pending", "hi")
-        val todoRequestJson = todoRequest.convertToJson()
+    internal fun shouldNotBeAbleToAddNewTodoWhenRequestedPriorityFiledIsNotValid() {
+        val todoRequestJson = TodoRequest(
+            description = "sleeping",
+            status = "pending",
+            priority = "invalidPriority"
+        ).convertToJson()
 
         mockMvc.perform(
             post("/todos")
@@ -108,7 +120,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorResponseWhenTodoNotFoundById() {
+    internal fun shouldNotBeAbleToReturnTodoWhenTodoIsNotFoundById() {
         mockMvc.perform(
             get("/todos/{todoId}", 2)
         ).andExpect(status().isNotFound)
@@ -118,7 +130,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenRequestedTodoIdIsNotValid() {
+    internal fun shouldNotBeAbleToReturnTodoWhenRequestedTodoIdIsNotValid() {
         mockMvc.perform(
             get("/todos/{todoId}", "abc")
         ).andExpect(status().isBadRequest)
@@ -145,7 +157,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenRequestedStatusIsNotValid() {
+    internal fun shouldNotBeAbleToReturnTodosWhenRequestedStatusIsNotValid() {
         mockMvc.perform(
             get("/todos/status/{status}", "abc123")
         ).andExpect(status().isBadRequest)
@@ -162,7 +174,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenRequestedPriorityIsNotValid() {
+    internal fun shouldNotBeAbleToReturnTodosWhenRequestedPriorityIsNotValid() {
         mockMvc.perform(
             get("/todos/priority/{priority}", "abc123")
         ).andExpect(status().isBadRequest)
@@ -170,8 +182,11 @@ internal class TodoControllerTest {
 
     @Test
     internal fun shouldBeAbleToUpdateDescriptionOfTodo() {
-        val updateTodoRequest = UpdateTodoRequest("sleeping", null, null)
-        val updateTodoRequestJson = updateTodoRequest.convertToJson()
+        val updateTodoRequestJson = UpdateTodoRequest(
+            description = "sleeping",
+            status = null,
+            priority = null
+        ).convertToJson()
 
         mockMvc.perform(
             put("/todos/{todoId}", todo.id)
@@ -184,7 +199,7 @@ internal class TodoControllerTest {
     }
 
     @Test
-    internal fun shouldBeAbleToReturnErrorWhenRequestedTodoIdIsNotPresent() {
+    internal fun shouldNotBeAbleToUpdateTodoWhenRequestedTodoIdIsNotPresent() {
         mockMvc.perform(
             put("/todos/{todoId}", 100)
         ).andExpect(status().isBadRequest)
@@ -192,8 +207,11 @@ internal class TodoControllerTest {
 
     @Test
     internal fun shouldNotBeAbleToUpdateTodoWhenRequestedStatusIsNotValid() {
-        val updateTodoRequest = UpdateTodoRequest("sleeping", "invalidStatus", null)
-        val updateTodoRequestJson = updateTodoRequest.convertToJson()
+        val updateTodoRequestJson = UpdateTodoRequest(
+            description = "sleeping",
+            status = "invalidStatus",
+            priority = null
+        ).convertToJson()
 
         mockMvc.perform(
             put("/todos/{todoId}", todo.id)
@@ -204,8 +222,11 @@ internal class TodoControllerTest {
 
     @Test
     internal fun shouldNotBeAbleToUpdateTodoWhenRequestedPriorityIsNotValid() {
-        val updateTodoRequest = UpdateTodoRequest("sleeping", null, "invalidPriority")
-        val updateTodoRequestJson = updateTodoRequest.convertToJson()
+        val updateTodoRequestJson = UpdateTodoRequest(
+            description = "sleeping",
+            status = null,
+            priority = "invalidPriority"
+        ).convertToJson()
 
         mockMvc.perform(
             put("/todos/{todoId}", todo.id)
