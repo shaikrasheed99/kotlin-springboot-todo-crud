@@ -126,7 +126,7 @@ internal class TodoControllerTest {
         ).andExpect(status().isNotFound)
             .andExpect(jsonPath("$.status").value(StatusResponses.ERROR.name))
             .andExpect(jsonPath("$.code").value(HttpStatus.NOT_FOUND.name))
-            .andExpect(jsonPath("$.message").value(Messages.TODO_NOT_FOUND_BY_ID.message))
+            .andExpect(jsonPath("$.message").value(Messages.TODO_NOT_FOUND_BY_ID.message + " - 2"))
     }
 
     @Test

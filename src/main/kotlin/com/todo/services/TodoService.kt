@@ -26,7 +26,7 @@ class TodoService(@Autowired private val todoRepository: TodoRepository) {
     fun getById(todoId: Int): Todo {
         return todoRepository
             .findById(todoId)
-            .orElseThrow { TodoNotFoundException(Messages.TODO_NOT_FOUND_BY_ID.message) };
+            .orElseThrow { TodoNotFoundException(Messages.TODO_NOT_FOUND_BY_ID.message + " - $todoId") };
     }
 
     fun getAllTodos(): MutableList<Todo> {

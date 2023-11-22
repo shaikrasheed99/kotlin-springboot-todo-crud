@@ -1,8 +1,8 @@
 package com.todo.exceptions
 
-import com.todo.constants.Messages
 import com.todo.dto.response.ErrorResponse
 import com.todo.utils.createErrorResponse
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -12,10 +12,14 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 @ControllerAdvice
 class TodoExceptionsHandler {
+    private val logger = LoggerFactory.getLogger(this::class.java)
+
     @ExceptionHandler(TodoNotFoundException::class)
     fun handleTodoNotFoundException(todoNotFoundException: TodoNotFoundException): ResponseEntity<ErrorResponse> {
-        val errorResponse =
-            createErrorResponse(HttpStatus.NOT_FOUND, Messages.TODO_NOT_FOUND_BY_ID.message)
+        val errorResponse = todoNotFoundException.message?.let {
+            logger.error(it)
+            createErrorResponse(HttpStatus.NOT_FOUND, it)
+        }
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse)
     }
@@ -42,6 +46,7 @@ class TodoExceptionsHandler {
                 errors[exception.name] = exception.message
             }
         }
+        logger.error(errors.toString())
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors)
     }
@@ -55,6 +60,7 @@ class TodoExceptionsHandler {
     )
     fun handleInvalidStatusAndPriorityException(exception: Exception): ResponseEntity<ErrorResponse> {
         val errorResponse = exception.message?.let {
+            logger.error(it)
             createErrorResponse(HttpStatus.BAD_REQUEST, it)
         }
 
